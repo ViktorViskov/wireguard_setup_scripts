@@ -11,19 +11,7 @@ client_ip="10.0.1.100/24"
 client_private_key=""
 client_public_key=""
 
-create_client() {
-        # read data from user
-        read_client_user_input
-        read_from_config
-
-        # generate keys
-        create_client_keys
-        register_on_server
-
-        # create config file
-        create_client_config
-}
-
+# show app managment menu
 start_menu() {
     # check for user is root
     check_for_root
@@ -34,6 +22,8 @@ start_menu() {
         echo "Press 'c' to create server config file (/etc/wireguard/wg0.conf)"
         echo "Press 'a' to add client to server and generate config file"
         echo "Press 'd' to delete client from server"
+        echo "Press 'r' to start/restart wireguard server"
+        echo "Press 's' to stop wireguard server"
         echo -n "ESC to exit: "
 
         # read user input
@@ -49,10 +39,31 @@ start_menu() {
         elif [ $key = "d" ]
         then
             delete_client
+        elif [ $key = "r" ]
+        then
+            wg-quick down wg0
+            wg-quick up wg0
+        elif [ $key = "s" ]
+        then
+            wg-quick down wg0
         fi
     else
         echo "Need root privilegios!"
     fi
+}
+
+# method for create client
+create_client() {
+        # read data from user
+        read_client_user_input
+        read_from_config
+
+        # generate keys
+        create_client_keys
+        register_on_server
+
+        # create config file
+        create_client_config
 }
 
 # check for root
@@ -117,7 +128,7 @@ create_client_config() {
     echo "PersistentKeepalive = 29" >> "$client_name.conf"
 }
 
-
+# method for create server configs
 create_server() {
     # read data from user
     read_server_user_input
@@ -195,4 +206,5 @@ delete_client() {
     sed -i "/ #$user_to_delete\b/d" /etc/wireguard/wg0.conf
 }
 
+# start script
 start_menu
