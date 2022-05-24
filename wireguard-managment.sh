@@ -1,13 +1,15 @@
 #!/bin/bash
-# variables
+# default settings
 device_to_intenet="enp0s3"
 server_public_address="viktorviskov.com"
-server_ip="10.0.1.1/24"
+server_ip="10.0.1.1/32"
 server_port="51820"
+client_name="default_client"
+client_ip="10.0.1.100/32"
+
+# variables
 server_private_key=""
 server_public_key=""
-client_name="default_client"
-client_ip="10.0.1.100/24"
 client_private_key=""
 client_public_key=""
 
@@ -110,8 +112,9 @@ create_client_keys() {
 
 # register to server config
 register_on_server() {
-    echo "PublicKey = $client_public_key    #$client_name" >> /etc/wireguard/wg0.conf
-    echo "AllowedIPs = $client_ip         #$client_name" >> /etc/wireguard/wg0.conf
+    echo "[Peer]        #$client_name" >> /etc/wireguard/wg0.conf
+    echo "PublicKey = $client_public_key        #$client_name" >> /etc/wireguard/wg0.conf
+    echo "AllowedIPs = $client_ip       #$client_name" >> /etc/wireguard/wg0.conf
 }
 
 create_client_config() {
