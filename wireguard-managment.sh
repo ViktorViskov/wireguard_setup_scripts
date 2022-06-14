@@ -112,6 +112,7 @@ create_client_keys() {
 
 # register to server config
 register_on_server() {
+    echo "" >> /etc/wireguard/wg0.conf
     echo "[Peer]        #$client_name" >> /etc/wireguard/wg0.conf
     echo "PublicKey = $client_public_key        #$client_name" >> /etc/wireguard/wg0.conf
     echo "AllowedIPs = $client_ip       #$client_name" >> /etc/wireguard/wg0.conf
@@ -192,7 +193,6 @@ create_configs() {
     echo "" >> /etc/wireguard/wg0.conf
     echo "#Public = $server_public_address:$server_port" >> /etc/wireguard/wg0.conf
     echo "" >> /etc/wireguard/wg0.conf
-    echo "[Peer]" >> /etc/wireguard/wg0.conf
 }
 
 # function for delete user
