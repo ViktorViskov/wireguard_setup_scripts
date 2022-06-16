@@ -146,6 +146,9 @@ create_server() {
 
 # read data to config
 read_server_user_input() {
+    # show interfaces
+    show_network_interfaces
+
     # read internet interface
     echo -n "Interface with internet: [$device_to_intenet]: "
     read -r new_device_to_intenet
@@ -208,6 +211,14 @@ delete_client() {
     # delete
     sed -i "/ #$user_to_delete\b/d" /etc/wireguard/wg0.conf
 }
+
+# show all network interfaces
+show_network_interfaces() {
+    clear
+    echo "Available network interfaces"
+    ip -o link show | awk '{print $2}' 
+}
+
 
 # start script
 start_menu
