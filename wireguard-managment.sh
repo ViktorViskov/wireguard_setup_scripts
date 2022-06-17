@@ -42,7 +42,7 @@ start_ui() {
                             "c")
                                 #  confirm action
                                 clear
-                                echo "Its overwrite current config file. Want you continue?"
+                                echo "Its overwrite current config file. Want you continue? [y/n]"
                                 read -rn1 confirm_input
                                 if [ $confirm_input = "y" ]
                                 then
