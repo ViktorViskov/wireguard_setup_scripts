@@ -1,7 +1,8 @@
 #!/bin/bash
 # default settings
-device_to_intenet=$(ip -o link show | awk '/BROADCAST,MULTICAST,UP,LOWER_UP/ {print $2; exit}')
-server_public_address="your local address"
+device_to_intenet=$(ip -o link show | awk '/BROADCAST,MULTICAST,UP,LOWER_UP/ {gsub(":","",$2); 
+print $2; exit}')
+server_public_address="Your public address"
 server_ip="10.0.1.1/32"
 server_port="51820"
 client_name="default_client"
@@ -207,6 +208,13 @@ read_server_user_input() {
         server_ip="$new_server_ip"
     fi
 
+    #read port
+    echo -n "Server port: [$server_port]: "
+    read -r new_server_ip
+    if [ "$new_server_port" != "" ]; then
+        server_port="$new_server_port"
+    fi
+
     #read public address
     echo -n "Server public address: [$server_public_address]: "
     read -r new_server_public_address
@@ -269,6 +277,11 @@ stop_server_action() {
 
 # method for create client
 create_client() {
+    clear
+
+    # show users
+    show_users
+
     # read data from user
     read_client_user_input
     read_from_config
@@ -335,11 +348,10 @@ create_client_config() {
 
 # function for delete user
 delete_client() {
-    # search all active clients
-    active_users=$(awk '/ #/' /etc/wireguard/wg0.conf | awk '{print $4}' | awk '!seen[$0]++')
+    clear
 
     # ask for user name
-    echo "Active users:" $active_users
+    show_users
     echo -n "User to delete: "
     read -r user_to_delete
 
@@ -347,11 +359,10 @@ delete_client() {
     sed -i "/ #$user_to_delete\b/d" /etc/wireguard/wg0.conf
 }
 
-# show all network interfaces
-show_network_interfaces() {
-    clear
-    echo "Available network interfaces"
-    ip -o link show | awk '{print $2}' 
+# show all users
+show_users() {
+    echo "Users registered on server"
+    awk '/ #/ {print $4} '  /etc/wireguard/wg0.conf | awk '/#/ {gsub("#","",$1); print $1}' | awk '!seen[$0]++'
 }
 
 
@@ -379,8 +390,14 @@ check_for_root() {
     fi
 }
 
+# show all network interfaces
+show_network_interfaces() {
+    clear
+    echo "Available network interfaces"
+    ip -o link show | awk '{print $2}' 
+}
+
 # 
 # start script
 # 
-# start_ui
-echo $device_to_intenet
+start_ui
