@@ -210,7 +210,7 @@ read_server_user_input() {
 
     #read port
     echo -n "Server port: [$server_port]: "
-    read -r new_server_ip
+    read -r new_server_port
     if [ "$new_server_port" != "" ]; then
         server_port="$new_server_port"
     fi
