@@ -79,6 +79,8 @@ start_ui() {
 
                             #enable inv4 routing
                             "4")
+                            clear
+
                             # uncommenting
                             sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
                             sed -i 's/#net.ipv4.ip_forward=0/net.ipv4.ip_forward=0/g' /etc/sysctl.conf
@@ -89,10 +91,9 @@ start_ui() {
                             # reload settings
                             sysctl -p /etc/sysctl.conf
 
-                            clear
                             echo "Routing enabled"
                             echo "Press any key to continue"
-                            read
+                            read -n1
                             ;;
                             #disable inv4 routing
                             "5")
@@ -105,7 +106,7 @@ start_ui() {
 
                             echo "Routing disabled"
                             echo "Press any key to continue"
-                            read
+                            read -n1
                             ;;
 
                         esac
