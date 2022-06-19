@@ -1,7 +1,6 @@
 #!/bin/bash
 # default settings
-device_to_intenet=$(ip -o link show | awk '/BROADCAST,MULTICAST,UP,LOWER_UP/ {gsub(":","",$2); 
-print $2; exit}')
+device_to_intenet=$(ip -o link show | awk '/BROADCAST,MULTICAST,UP,LOWER_UP/ {gsub(":","",$2); print $2; exit}')
 server_public_address="Your public address"
 server_ip="10.0.1.1/32"
 server_port="51820"
@@ -262,16 +261,11 @@ client_menu() {
 
 # read menu action
 read_action() {
-    # key=true
     # read key
     read -rn1 key
 
     #  to lower case
     key=$(echo $key | tr 'A-Z' 'a-z')
-
-    # to int
-    # key=$(printf '%d' "'$key")
-    # return $(expr $key)
 
     # result
     echo -n $key
