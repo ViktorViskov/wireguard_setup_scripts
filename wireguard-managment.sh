@@ -74,6 +74,8 @@ start_ui() {
 
                         esac
                     done
+                    # change default value
+                    server_menu=true
                 ;;
                 # client menu
                 "c")
@@ -102,6 +104,8 @@ start_ui() {
                             ;;
                         esac
                     done
+                    # change default value
+                    client_menu=true
                 ;;
             esac
         done
@@ -126,11 +130,7 @@ main_menu() {
     echo -n "ESC to exit: "
     
     #  dialog to select menu
-    select_main_menu
-}
-
-# select menu to show
-select_main_menu() {
+    menu=true
     read -rn1 menu
 }
 
