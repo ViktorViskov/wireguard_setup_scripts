@@ -343,7 +343,7 @@ create_client_config() {
     echo "PublicKey = $server_public_key" >>"$client_name.conf"
     echo "Endpoint = $server_public_address" >>"$client_name.conf"
     echo "AllowedIPs = 0.0.0.0/0" >>"$client_name.conf"
-    echo "PersistentKeepalive = 29" >>"$client_name.conf"
+    # echo "PersistentKeepalive = 29" >>"$client_name.conf" # send empty packet to save connection every 29 sec
 }
 
 # function for delete user
