@@ -6,6 +6,7 @@ server_ip="10.0.1.1/32"
 server_port="51820"
 client_name="default_client"
 client_ip="10.0.1.100/32"
+allowed_ip="0.0.0.0/24"
 
 # variables
 server_private_key=""
@@ -447,7 +448,7 @@ create_client_config() {
     echo "[Peer]" >>"$client_name.conf"
     echo "PublicKey = $server_public_key" >>"$client_name.conf"
     echo "Endpoint = $server_public_address" >>"$client_name.conf"
-    echo "AllowedIPs = 0.0.0.0/0" >>"$client_name.conf"
+    echo "AllowedIPs = $allowed_ip" >>"$client_name.conf"
     # echo "PersistentKeepalive = 29" >>"$client_name.conf" # send empty packet to save connection every 29 sec
 }
 
