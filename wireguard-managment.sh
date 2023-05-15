@@ -20,191 +20,189 @@ action=true
 start_ui() {
     # check for user is root
     check_for_root
-    if [ $? = 1 ]; then
-        while [ $menu != $'\e' ]
-        do
-            # select submenu
-            main_menu
 
-            case $menu in 
-                # install menu
-                "i")
-                    action=true
-                    while [ $action != $'\e' ]
-                    do
-                        # show menu
-                        install_menu
+    # if user root run script
+    while [ $menu != $'\e' ]
+    do
+        # select submenu
+        main_menu
 
-                        # read action
-                        action=$(read_action)
-
-                        case $action in 
-                            # install wireguard
-                            "i")
-                            clear
-                            echo "Intalling wireguard"
-                            apt update
-                            apt install wireguard -y
-                            echo "Installing successfull"
-                            echo "Press any key to continue"
-                            read -n1
-                            ;;
-
-                            # remove wireguard
-                            "r")
-                            clear
-                            echo "Deleting wireguard"
-                            apt purge wireguard -y
-                            echo "Deleting successfull"
-                            echo "Press any key to continue"
-                            read -n1
-                            ;;
-                            # enable autostart
-                            "a")
-                            clear
-                            echo "Enabling wireguard"
-                            systemctl enable wg-quick@wg0
-                            echo "Press any key to continue"
-                            read -n1
-                            ;;
-
-                            # disable autostart
-                            "d")
-                            clear
-                            echo "Disabling wireguard"
-                            systemctl disable wg-quick@wg0
-                            echo "Press any key to continue"
-                            read -n1
-                            ;;
-
-                            #enable inv4 routing
-                            "4")
-                            clear
-
-                            # uncommenting
-                            sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-                            sed -i 's/#net.ipv4.ip_forward=0/net.ipv4.ip_forward=0/g' /etc/sysctl.conf
-
-                            # enabling
-                            sed -i 's/net.ipv4.ip_forward=0/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-                            
-                            # reload settings
-                            sysctl -p /etc/sysctl.conf
-
-                            echo "Routing enabled"
-                            echo "Press any key to continue"
-                            read -n1
-                            ;;
-                            #disable inv4 routing
-                            "5")
-                            clear
-                            # disabling
-                            sed -i 's/net.ipv4.ip_forward=1/net.ipv4.ip_forward=0/g' /etc/sysctl.conf
-                            
-                            # reload settings
-                            sysctl -p /etc/sysctl.conf
-
-                            echo "Routing disabled"
-                            echo "Press any key to continue"
-                            read -n1
-                            ;;
-
-                        esac
-                    done
-                ;;
-                # server menu
-                "s")
-                    action=true
-                    while [ $action != $'\e' ]
-                    do
-                        # show menu
-                        server_menu
-
-                        # read action
-                        action=$(read_action)
-
-                        case $action in 
-                            # create server config file
-                            "c")
-                            #  confirm action
-                            clear
-                            echo "Its overwrite current config file. Want you continue? [y/n]"
-                            read -rn1 confirm_input
-                            if [ $confirm_input = "y" ]
-                            then
-                                # script
-                                create_config_action
-                            fi
-                            ;;
-
-                            # restart
-                            "r")
-                            restart_server_action
-                            ;;
-
-                            # stop server
-                            "t")
-                            stop_server_action
-                            ;;
-
-                            # show file
-                            "s")
-                            clear
-                            cat /etc/wireguard/wg0.conf
-                            echo ""
-                            echo "Press any key for continue"
-                            read -n1
-                            ;;
-
-                            # edith file
-                            "e")
-                            vi /etc/wireguard/wg0.conf
-                            ;;
-
-                        esac
-                    done
-                    # change default value
-                    server_menu=true
-                ;;
-                # client menu
-                "c")
+        case $menu in 
+            # install menu
+            "i")
                 action=true
-                    while [ $action != $'\e' ]
-                    do
-                        # show menu
-                        client_menu
+                while [ $action != $'\e' ]
+                do
+                    # show menu
+                    install_menu
 
-                        # read action
-                        action=$(read_action)
+                    # read action
+                    action=$(read_action)
 
-                        case $action in 
-                            # create server config file
-                            "a")
-                            create_client
-                            ;;
+                    case $action in 
+                        # install wireguard
+                        "i")
+                        clear
+                        echo "Intalling wireguard"
+                        apt update
+                        apt install wireguard -y
+                        echo "Installing successfull"
+                        echo "Press any key to continue"
+                        read -n1
+                        ;;
 
-                            # restart
-                            "d")
-                            delete_client
-                            ;;
+                        # remove wireguard
+                        "r")
+                        clear
+                        echo "Deleting wireguard"
+                        apt purge wireguard -y
+                        echo "Deleting successfull"
+                        echo "Press any key to continue"
+                        read -n1
+                        ;;
+                        # enable autostart
+                        "a")
+                        clear
+                        echo "Enabling wireguard"
+                        systemctl enable wg-quick@wg0
+                        echo "Press any key to continue"
+                        read -n1
+                        ;;
 
-                            # stop server
-                            "l")
-                            show_used_ip
-                            ;;
-                        esac
-                    done
-                    # change default value
-                    client_menu=true
-                ;;
-            esac
-        done
-        clear
+                        # disable autostart
+                        "d")
+                        clear
+                        echo "Disabling wireguard"
+                        systemctl disable wg-quick@wg0
+                        echo "Press any key to continue"
+                        read -n1
+                        ;;
 
+                        #enable inv4 routing
+                        "4")
+                        clear
 
-    else
-        echo "Need root privilegios!"
-    fi
+                        # uncommenting
+                        sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+                        sed -i 's/#net.ipv4.ip_forward=0/net.ipv4.ip_forward=0/g' /etc/sysctl.conf
+
+                        # enabling
+                        sed -i 's/net.ipv4.ip_forward=0/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+                        
+                        # reload settings
+                        sysctl -p /etc/sysctl.conf
+
+                        echo "Routing enabled"
+                        echo "Press any key to continue"
+                        read -n1
+                        ;;
+                        #disable inv4 routing
+                        "5")
+                        clear
+                        # disabling
+                        sed -i 's/net.ipv4.ip_forward=1/net.ipv4.ip_forward=0/g' /etc/sysctl.conf
+                        
+                        # reload settings
+                        sysctl -p /etc/sysctl.conf
+
+                        echo "Routing disabled"
+                        echo "Press any key to continue"
+                        read -n1
+                        ;;
+
+                    esac
+                done
+            ;;
+            # server menu
+            "s")
+                action=true
+                while [ $action != $'\e' ]
+                do
+                    # show menu
+                    server_menu
+
+                    # read action
+                    action=$(read_action)
+
+                    case $action in 
+                        # create server config file
+                        "c")
+                        #  confirm action
+                        clear
+                        echo "Its overwrite current config file. Want you continue? [y/n]"
+                        read -rn1 confirm_input
+                        if [ $confirm_input = "y" ]
+                        then
+                            # script
+                            create_config_action
+                        fi
+                        ;;
+
+                        # restart
+                        "r")
+                        restart_server_action
+                        ;;
+
+                        # stop server
+                        "t")
+                        stop_server_action
+                        ;;
+
+                        # show file
+                        "s")
+                        clear
+                        cat /etc/wireguard/wg0.conf
+                        echo ""
+                        echo "Press any key for continue"
+                        read -n1
+                        ;;
+
+                        # edith file
+                        "e")
+                        vi /etc/wireguard/wg0.conf
+                        ;;
+
+                    esac
+                done
+                # change default value
+                server_menu=true
+            ;;
+            # client menu
+            "c")
+            action=true
+                while [ $action != $'\e' ]
+                do
+                    # show menu
+                    client_menu
+
+                    # read action
+                    action=$(read_action)
+
+                    case $action in 
+                        # create client
+                        "a")
+                        create_client
+                        ;;
+
+                        "d")
+                        delete_client
+                        ;;
+
+                        # show user list
+                        "l")
+                        show_used_ip
+                        echo ""
+                        echo "Press any key for continue"
+                        read -n1
+                        ;;
+                    esac
+                done
+                # change default value
+                client_menu=true
+            ;;
+        esac
+    done
+    clear
 }
 
 # 
@@ -385,8 +383,11 @@ stop_server_action() {
 create_client() {
     clear
 
+    # load info about next ip to use
+    get_next_ip
+
     # show users
-    show_users
+    show_used_ip
 
     # read data from user
     read_client_user_input
@@ -398,6 +399,14 @@ create_client() {
 
     # create config file
     create_client_config
+
+    # ask about restarting service
+    echo "Do you want restart Wireguard service to accept changes? [y/n]"
+    read -rn1 confirm_input
+    if [ $confirm_input = "y" ]
+    then
+        restart_server_action
+    fi
 }
 
 # read data to config
@@ -457,7 +466,7 @@ delete_client() {
     clear
 
     # ask for user name
-    show_users
+    show_used_ip
     echo -n "User to delete: "
     read -r user_to_delete
 
@@ -465,21 +474,11 @@ delete_client() {
     sed -i "/ #$user_to_delete\b/d" /etc/wireguard/wg0.conf
 }
 
-# show all users
-show_users() {
-    echo "Users registered on server"
-    awk '/ #/ {print $4} '  /etc/wireguard/wg0.conf | awk '/#/ {gsub("#","",$1); print $1}' | awk '!seen[$0]++'
-}
-
-
 # method for used ip addresses
 show_used_ip() {
     clear
     echo "All used IP addresses"
     cat /etc/wireguard/wg0.conf | grep AllowedIPs | awk '{print $4, "\t-\t" , $3}'
-    echo ""
-    echo "Press any key for continue"
-    read -n1
 }
 
 # 
@@ -489,10 +488,9 @@ show_used_ip() {
 # check for root
 check_for_root() {
     user_name=$(whoami)
-    if [ $user_name = "root" ]; then
-        return 1
-    else
-        return 0
+    if [ $user_name != "root" ]; then
+        echo "Need root privilegios!"
+        exit
     fi
 }
 
@@ -501,6 +499,19 @@ show_network_interfaces() {
     clear
     echo "Available network interfaces"
     ip -o link show | awk '{print $2}' 
+}
+
+get_next_ip() {
+    last_host=$(cat /etc/wireguard/wg0.conf | grep AllowedIPs | tail -n 1  | awk '{print $3}' | awk -F'/' '{print $1}' | awk -F'.' '{print $4}')
+    # exit from func if last host not exist
+    if ! [ $last_host ]; then
+        return 
+    fi
+
+    next_host=$(($last_host + 1))
+    network_mask=$(echo $client_ip | awk -F'/' '{print $2}')
+    next_network_addr=$(echo $client_ip | awk -F'.' -v OFS='.' '{print $1, $2, $3}').$next_host/$network_mask
+    client_ip=$next_network_addr
 }
 
 # 
